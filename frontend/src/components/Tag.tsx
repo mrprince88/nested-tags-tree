@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useMutation, useQueryClient } from "react-query";
+import { toast } from "react-toastify";
 
 import { Tag as TagType } from "src/types";
 
@@ -30,6 +31,10 @@ const Tag = ({ data }: TagProps) => {
         setIsAddingChild(false);
         setIsExpanded(true);
         queryClient.invalidateQueries("tag");
+        toast.success("Child added successfully");
+      },
+      onError: () => {
+        toast.error("Error adding child");
       },
     }
   );
@@ -51,6 +56,10 @@ const Tag = ({ data }: TagProps) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("tag");
+        toast.success("Data added successfully");
+      },
+      onError: () => {
+        toast.error("Error adding data");
       },
     }
   );
