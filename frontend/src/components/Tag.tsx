@@ -11,24 +11,24 @@ type TagProps = {
 
 const Tag = ({ data }: TagProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isAddingChild, setIsAddingChild] = useState(false);
+  // const [isAddingChild, setIsAddingChild] = useState(false);
 
   const queryClient = useQueryClient();
 
   const { mutateAsync: addChild } = useMutation(
-    async (name: string) => {
+    async () => {
       const response = await fetch("http://localhost:5000/tag", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, parent_id: data.id }),
+        body: JSON.stringify({ parent_id: data.id }),
       });
       return response.json();
     },
     {
       onSuccess: () => {
-        setIsAddingChild(false);
+        // setIsAddingChild(false);
         setIsExpanded(true);
         queryClient.invalidateQueries("tag");
         toast.success("Child added successfully");
@@ -81,14 +81,15 @@ const Tag = ({ data }: TagProps) => {
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-md ml-auto"
           onClick={() => {
-            setIsAddingChild(!isAddingChild);
+            // setIsAddingChild(!isAddingChild);
+            addChild();
           }}
         >
           Add Child
         </button>
       </div>
 
-      {!isAddingChild && !data.children && (
+      {!data.children && (
         <form
           className="mt-4"
           onSubmit={(e) => {
@@ -127,7 +128,7 @@ const Tag = ({ data }: TagProps) => {
         </ul>
       )}
 
-      {isAddingChild && (
+      {/* {isAddingChild && (
         <div className="mt-4">
           <form
             onSubmit={(e) => {
@@ -154,7 +155,7 @@ const Tag = ({ data }: TagProps) => {
             </button>
           </form>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

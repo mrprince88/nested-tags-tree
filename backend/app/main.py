@@ -80,16 +80,30 @@ def get_tags():
 @app.route("/tag", methods=["POST"])
 def create_tag():
     data = request.get_json()
-
-    print("data", data)
-    name = data.get("name")
     parent_id = data.get("parent_id")
 
-    tag = Tag(name=name, parent_id=parent_id)
-    db.session.add(tag)
+    if parent_id is None:
+        return {"error": "parent_id is required"}, 400
+
+    parent = Tag.query.get(parent_id)
+
+    if parent is None:
+        return {"error": "parent not found"}, 404
+
+    if parent.data is not None:
+        parent.data = None
+
+    name = ""
+    if parent.name == "root":
+        name = f"child{len(parent.children)+1}"
+    else:
+        name = f"{parent.name}-child{len(parent.children)+1}"
+
+    new_tag = Tag(name=name, parent_id=parent_id)
+    db.session.add(new_tag)
     db.session.commit()
 
-    return {"id": tag.id}
+    return {"id": "dasd"}
 
 
 # get all children of a tag
