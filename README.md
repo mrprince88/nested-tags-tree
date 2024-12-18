@@ -6,7 +6,10 @@ Backend: Flask, MYSQL
 For Backend, few steps are needed:
 
 To start MYSQL server:
-1. ``` cd backend/docker && docker compose up -d```
+```
+cd backend/docker
+docker compose up -d
+```
 
 For flask app:
 ```
