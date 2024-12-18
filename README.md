@@ -24,6 +24,14 @@ pnpm install
 pnpm dev
 ```
 
+This was built for an assignment.
+
+Demo:
+
+
+
+https://github.com/user-attachments/assets/53b87219-3f47-4c00-bf28-efb8d62a6acc
+
 
     
 
