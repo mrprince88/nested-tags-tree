@@ -88,7 +88,7 @@ const Tag = ({ data }: TagProps) => {
         </button>
       </div>
 
-      {!isAddingChild && data.children?.length === 0 && (
+      {!isAddingChild && !data.children && (
         <form
           className="mt-4"
           onSubmit={(e) => {

@@ -40,8 +40,22 @@ class TagSchema(SQLAlchemyAutoSchema):
         model = Tag
         include_relationships = True
         load_instance = True
+        fields = ("id", "name", "data", "children")
 
     children = Nested("TagSchema", many=True)
+
+    def remove_null_and_empty(self, data):
+        if data.get("data") is None:
+            data.pop("data", None)
+        if data.get("children") == []:
+            data.pop("children", None)
+        return data
+
+    def dump(self, obj, many=None, **kwargs):
+        data = super().dump(obj, many=many, **kwargs)
+        if many:
+            return [self.remove_null_and_empty(item) for item in data]
+        return self.remove_null_and_empty(data)
 
 
 with app.app_context():
@@ -55,9 +69,9 @@ with app.app_context():
 # get all tags at the root level
 @app.route("/tag", methods=["GET"])
 def get_tags():
-    tags = Tag.query.filter_by(parent_id=None).all()
+    tags = Tag.query.filter_by(parent_id=None).first()
 
-    tags_json = TagSchema(many=True).dump(tags)
+    tags_json = TagSchema(many=False).dump(tags)
 
     return tags_json
 
